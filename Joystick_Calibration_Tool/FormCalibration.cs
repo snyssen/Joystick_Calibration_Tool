@@ -72,10 +72,15 @@ namespace Joystick_Calibration_Tool
                     donneesJoy = new DonneesJoy(IsvGachette ? vGachette : 0, IsvMissile ? vMissile : 0, IsvAxeX ? vAxeX : 128, IsvAxeY ? vAxeY : 128, IsvThrottle ? vThrottle : 128);
                 }
             }
-            catch (Exception ex)
+            catch (TimeoutException ex)
             {
-                //RTB_Recu.Text = "Une exception sur le port série a été détectée !\n" + ex.ToString();
-                MessageBox.Show("Une exception sur le port série a été détectée !\n" + ex.ToString(), "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Temps de lecture dépassé ! Il semblerait que le port ne répond pas...\n\n" + ex.ToString(), "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception)
+            {
+                if (SP_Joy.IsOpen)
+                    Close_Serial_Port(SP_Joy);
+                timer1.Stop();
             }
         }
 
@@ -175,16 +180,39 @@ namespace Joystick_Calibration_Tool
         }
         private void DrawThrottle()
         {
-
+            gb_Throttle.Invalidate();
         }
         private void DrawJoystick()
         {
-
+            gb_Joystick.Invalidate();
         }
         private void DrawButtons()
         {
             pbGachette.Image = donneesJoy.vGachette ? Properties.Resources._2000px_Button_Icon_Green_svg : Properties.Resources._2000px_Redbutton_svg;
             pbMissile.Image =  donneesJoy.vMissile ? Properties.Resources._2000px_Button_Icon_Green_svg : Properties.Resources._2000px_Redbutton_svg;
+        }
+
+        private void gb_Throttle_Paint(object sender, PaintEventArgs e)
+        {
+            GroupBox gb = (GroupBox)sender;
+            e.Graphics.DrawLine(new Pen(new SolidBrush(Color.Black)), 0, gb.Height / 2, gb.Width, gb.Height / 2);
+            if (SP_Joy.IsOpen)
+            {
+                e.Graphics.DrawEllipse(new Pen(new SolidBrush(Color.Red), 2), gb.Width / 2, gb.Height - (donneesJoy.vThrottle * gb.Height / 256), 5, 5);
+                lblThrottle.Text = donneesJoy.vThrottle.ToString();
+            }
+        }
+
+        private void gb_Joystick_Paint(object sender, PaintEventArgs e)
+        {
+            GroupBox gb = (GroupBox)sender;
+            e.Graphics.DrawLine(new Pen(new SolidBrush(Color.Black)), 0, gb.Height / 2, gb.Width, gb.Height / 2);
+            e.Graphics.DrawLine(new Pen(new SolidBrush(Color.Black)), gb.Width / 2, 0, gb.Width / 2, gb.Height);
+            if (SP_Joy.IsOpen)
+            {
+                e.Graphics.DrawEllipse(new Pen(new SolidBrush(Color.Red), 2), gb.Width - (donneesJoy.vAxeX * gb.Width / 256), donneesJoy.vAxeY * gb.Height / 256, 5, 5);
+                lblJoystick.Text = donneesJoy.vAxeX.ToString() + ";" + donneesJoy.vAxeY.ToString();
+            }
         }
     }
 

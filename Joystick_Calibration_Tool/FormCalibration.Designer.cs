@@ -110,6 +110,7 @@
             // 
             // SP_Joy
             // 
+            this.SP_Joy.ReadTimeout = 3000;
             this.SP_Joy.ErrorReceived += new System.IO.Ports.SerialErrorReceivedEventHandler(this.SP_Joy_ErrorReceived);
             this.SP_Joy.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.SP_Joy_DataReceived);
             // 
@@ -137,15 +138,16 @@
             this.gb_Joystick.TabIndex = 16;
             this.gb_Joystick.TabStop = false;
             this.gb_Joystick.Text = "Joystick";
+            this.gb_Joystick.Paint += new System.Windows.Forms.PaintEventHandler(this.gb_Joystick_Paint);
             // 
             // lblJoystick
             // 
             this.lblJoystick.AutoSize = true;
             this.lblJoystick.Location = new System.Drawing.Point(0, 237);
             this.lblJoystick.Name = "lblJoystick";
-            this.lblJoystick.Size = new System.Drawing.Size(35, 13);
+            this.lblJoystick.Size = new System.Drawing.Size(66, 13);
             this.lblJoystick.TabIndex = 1;
-            this.lblJoystick.Text = "label3";
+            this.lblJoystick.Text = "Pos Joystick";
             // 
             // gb_Throttle
             // 
@@ -156,15 +158,16 @@
             this.gb_Throttle.TabIndex = 17;
             this.gb_Throttle.TabStop = false;
             this.gb_Throttle.Text = "Throttle";
+            this.gb_Throttle.Paint += new System.Windows.Forms.PaintEventHandler(this.gb_Throttle_Paint);
             // 
             // lblThrottle
             // 
             this.lblThrottle.AutoSize = true;
             this.lblThrottle.Location = new System.Drawing.Point(-3, 342);
             this.lblThrottle.Name = "lblThrottle";
-            this.lblThrottle.Size = new System.Drawing.Size(35, 13);
+            this.lblThrottle.Size = new System.Drawing.Size(64, 13);
             this.lblThrottle.TabIndex = 0;
-            this.lblThrottle.Text = "label3";
+            this.lblThrottle.Text = "Pos Throttle";
             // 
             // gb_Boutons
             // 
